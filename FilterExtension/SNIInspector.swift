@@ -30,16 +30,16 @@ enum SNIInspector {
         guard i < b.count else { return nil }
         i += 1 + Int(b[i])                                         // session_id
         guard i + 2 <= b.count else { return nil }
-        i += 2 + (Int(b[i]) << 8 | Int(b[i + 1]))                  // cipher_suites
+        i += 2 + be16(b, i)                                        // cipher_suites
         guard i < b.count else { return nil }
         i += 1 + Int(b[i])                                         // compression_methods
 
         guard i + 2 <= b.count else { return nil }
-        let extEnd = min(i + 2 + (Int(b[i]) << 8 | Int(b[i + 1])), b.count)
+        let extEnd = min(i + 2 + be16(b, i), b.count)
         i += 2
         while i + 4 <= extEnd {
-            let type = Int(b[i]) << 8 | Int(b[i + 1])
-            let len = Int(b[i + 2]) << 8 | Int(b[i + 3])
+            let type = be16(b, i)
+            let len = be16(b, i + 2)
             i += 4
             if type == 0x0000 { return hostName(b, start: i, len: len) }
             i += len
@@ -55,9 +55,15 @@ enum SNIInspector {
         i += 2                                                     // server_name_list length
         guard i + 3 <= end, b[i] == 0 else { return nil }          // name_type == host_name
         i += 1
-        let nameLen = Int(b[i]) << 8 | Int(b[i + 1])
+        let nameLen = be16(b, i)
         i += 2
         guard i + nameLen <= end else { return nil }
         return String(bytes: b[i..<i + nameLen], encoding: .utf8)
+    }
+
+    /// Read a big-endian 16-bit field at `i` (a length or extension type). Callers
+    /// bounds-check that `i + 2 <= count` before reading.
+    private static func be16(_ b: [UInt8], _ i: Int) -> Int {
+        Int(b[i]) << 8 | Int(b[i + 1])
     }
 }
