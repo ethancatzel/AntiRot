@@ -1,0 +1,463 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		073A2E18FBB5E051E347A915 /* QUICInitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6459C334FCE3A0C93176924 /* QUICInitial.swift */; };
+		0A208EED7B0CAB4F038CD81D /* FilterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F4AD75746FEE8FC30F64C /* FilterController.swift */; };
+		135908EE10FE4284CF1700EB /* Blocklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B4F32DFA26B36A2603F1BB /* Blocklist.swift */; };
+		21470206C3734C12E02D7109 /* SNIInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BED356AC538DB8A5267F55C /* SNIInspector.swift */; };
+		60C7A453CE2D45BB26A269A1 /* Blocklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B4F32DFA26B36A2603F1BB /* Blocklist.swift */; };
+		6381B7D27550444FB99BD477 /* FilterDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48104BDFEE7C6B4D72476DC3 /* FilterDataProvider.swift */; };
+		748E1C632045B4954E6A993B /* AntiRotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9569E50442B176A137CB5DA8 /* AntiRotApp.swift */; };
+		87B43AD2EF5D9735D353E85D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8381D5F596771245AD03E9B /* main.swift */; };
+		B787DDED156CD1247E78CD34 /* FilterExtension.systemextension in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 2257A9ABEEC17E99E2FD3DFC /* FilterExtension.systemextension */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F485F4D1FCFE3C07A08F563C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF97001322BAF7782A2DEAFA /* ContentView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B979A02FE385AC5194D432B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 430F0F04FA4AB6E0EABDBD9F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F2DDC225F2E43BB48EA6A7F3;
+			remoteInfo = FilterExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		54A9627F537AF7328BB44BAF /* Embed System Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				B787DDED156CD1247E78CD34 /* FilterExtension.systemextension in Embed System Extensions */,
+			);
+			name = "Embed System Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2257A9ABEEC17E99E2FD3DFC /* FilterExtension.systemextension */ = {isa = PBXFileReference; explicitFileType = "wrapper.system-extension"; includeInIndex = 0; path = FilterExtension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
+		22B2D882F95D10F45EABB27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3BC8141C1B7533A38DF4E484 /* AntiRot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AntiRot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		48104BDFEE7C6B4D72476DC3 /* FilterDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterDataProvider.swift; sourceTree = "<group>"; };
+		88CA8E4CFE405B983533DAB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9569E50442B176A137CB5DA8 /* AntiRotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AntiRotApp.swift; sourceTree = "<group>"; };
+		9BED356AC538DB8A5267F55C /* SNIInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNIInspector.swift; sourceTree = "<group>"; };
+		A2AD0C3386B467A827BBE843 /* AntiRot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AntiRot.entitlements; sourceTree = "<group>"; };
+		AF97001322BAF7782A2DEAFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B7B4F32DFA26B36A2603F1BB /* Blocklist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blocklist.swift; sourceTree = "<group>"; };
+		B91F4AD75746FEE8FC30F64C /* FilterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterController.swift; sourceTree = "<group>"; };
+		BAED5090E54AAA315D040E16 /* FilterExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FilterExtension.entitlements; sourceTree = "<group>"; };
+		C8381D5F596771245AD03E9B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		D6459C334FCE3A0C93176924 /* QUICInitial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QUICInitial.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0444B839B1A5E25A0DA337A0 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				B7B4F32DFA26B36A2603F1BB /* Blocklist.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		1F2D064EA2EA29B03CC04927 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A2AD0C3386B467A827BBE843 /* AntiRot.entitlements */,
+				9569E50442B176A137CB5DA8 /* AntiRotApp.swift */,
+				AF97001322BAF7782A2DEAFA /* ContentView.swift */,
+				B91F4AD75746FEE8FC30F64C /* FilterController.swift */,
+				22B2D882F95D10F45EABB27C /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		3BEF1496DB2100727FAB84CF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3BC8141C1B7533A38DF4E484 /* AntiRot.app */,
+				2257A9ABEEC17E99E2FD3DFC /* FilterExtension.systemextension */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		51EE5E053975C984CBC134B1 /* FilterExtension */ = {
+			isa = PBXGroup;
+			children = (
+				48104BDFEE7C6B4D72476DC3 /* FilterDataProvider.swift */,
+				BAED5090E54AAA315D040E16 /* FilterExtension.entitlements */,
+				88CA8E4CFE405B983533DAB8 /* Info.plist */,
+				C8381D5F596771245AD03E9B /* main.swift */,
+				D6459C334FCE3A0C93176924 /* QUICInitial.swift */,
+				9BED356AC538DB8A5267F55C /* SNIInspector.swift */,
+			);
+			path = FilterExtension;
+			sourceTree = "<group>";
+		};
+		F2BE6B033B5672B13B38E207 = {
+			isa = PBXGroup;
+			children = (
+				1F2D064EA2EA29B03CC04927 /* App */,
+				51EE5E053975C984CBC134B1 /* FilterExtension */,
+				0444B839B1A5E25A0DA337A0 /* Shared */,
+				3BEF1496DB2100727FAB84CF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BA355C34AE2E71A20D5F2753 /* AntiRot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 74407F8C62735D2DD9CF9D83 /* Build configuration list for PBXNativeTarget "AntiRot" */;
+			buildPhases = (
+				44B58610244AB40065B90D54 /* Sources */,
+				54A9627F537AF7328BB44BAF /* Embed System Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ED1497E0D3BA9496F3DA4617 /* PBXTargetDependency */,
+			);
+			name = AntiRot;
+			packageProductDependencies = (
+			);
+			productName = AntiRot;
+			productReference = 3BC8141C1B7533A38DF4E484 /* AntiRot.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F2DDC225F2E43BB48EA6A7F3 /* FilterExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F0DB50C786080055A8B3667 /* Build configuration list for PBXNativeTarget "FilterExtension" */;
+			buildPhases = (
+				7797ECC745401E520E5DD3BC /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FilterExtension;
+			packageProductDependencies = (
+			);
+			productName = FilterExtension;
+			productReference = 2257A9ABEEC17E99E2FD3DFC /* FilterExtension.systemextension */;
+			productType = "com.apple.product-type.system-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		430F0F04FA4AB6E0EABDBD9F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					BA355C34AE2E71A20D5F2753 = {
+						DevelopmentTeam = 452Q4HE563;
+						ProvisioningStyle = Manual;
+					};
+					F2DDC225F2E43BB48EA6A7F3 = {
+						DevelopmentTeam = 452Q4HE563;
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 09CFBCA0737AD4257308928C /* Build configuration list for PBXProject "AntiRot" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F2BE6B033B5672B13B38E207;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3BEF1496DB2100727FAB84CF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BA355C34AE2E71A20D5F2753 /* AntiRot */,
+				F2DDC225F2E43BB48EA6A7F3 /* FilterExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		44B58610244AB40065B90D54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				748E1C632045B4954E6A993B /* AntiRotApp.swift in Sources */,
+				135908EE10FE4284CF1700EB /* Blocklist.swift in Sources */,
+				F485F4D1FCFE3C07A08F563C /* ContentView.swift in Sources */,
+				0A208EED7B0CAB4F038CD81D /* FilterController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7797ECC745401E520E5DD3BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60C7A453CE2D45BB26A269A1 /* Blocklist.swift in Sources */,
+				6381B7D27550444FB99BD477 /* FilterDataProvider.swift in Sources */,
+				073A2E18FBB5E051E347A915 /* QUICInitial.swift in Sources */,
+				21470206C3734C12E02D7109 /* SNIInspector.swift in Sources */,
+				87B43AD2EF5D9735D353E85D /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		ED1497E0D3BA9496F3DA4617 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F2DDC225F2E43BB48EA6A7F3 /* FilterExtension */;
+			targetProxy = B979A02FE385AC5194D432B7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		11FD58926359A1849EBC1CE4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FilterExtension/FilterExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = FilterExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethancatzel.AntiRot.FilterExtension;
+				PRODUCT_NAME = com.ethancatzel.AntiRot.FilterExtension;
+				PROVISIONING_PROFILE_SPECIFIER = AntiRotFilterExtension;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		14DF9CBF25FA6CFC030380EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 452Q4HE563;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		88F2053DA93C93EF1E6BD42B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 452Q4HE563;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8CB6416D5BCC8B606D425E52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/AntiRot.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethancatzel.AntiRot;
+				PROVISIONING_PROFILE_SPECIFIER = AntiRot;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		CE5F065BDCD15729BDEC7DB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FilterExtension/FilterExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = FilterExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethancatzel.AntiRot.FilterExtension;
+				PRODUCT_NAME = com.ethancatzel.AntiRot.FilterExtension;
+				PROVISIONING_PROFILE_SPECIFIER = AntiRotFilterExtension;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		EE7C754D04BE0ED371384D23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/AntiRot.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethancatzel.AntiRot;
+				PROVISIONING_PROFILE_SPECIFIER = AntiRot;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		09CFBCA0737AD4257308928C /* Build configuration list for PBXProject "AntiRot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				14DF9CBF25FA6CFC030380EF /* Debug */,
+				88F2053DA93C93EF1E6BD42B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		74407F8C62735D2DD9CF9D83 /* Build configuration list for PBXNativeTarget "AntiRot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE7C754D04BE0ED371384D23 /* Debug */,
+				8CB6416D5BCC8B606D425E52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7F0DB50C786080055A8B3667 /* Build configuration list for PBXNativeTarget "FilterExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE5F065BDCD15729BDEC7DB5 /* Debug */,
+				11FD58926359A1849EBC1CE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 430F0F04FA4AB6E0EABDBD9F /* Project object */;
+}

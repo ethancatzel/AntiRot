@@ -1,0 +1,80 @@
+# XcodeGen spec. Generate the project with:  xcodegen generate
+# Then open AntiRot.xcodeproj. Re-run xcodegen after editing this file.
+#
+# NOTE: `xcodegen generate` OWNS the Info.plist files (it writes them from the
+# `info:` blocks below), so the hand-written FilterExtension/Info.plist is
+# superseded — its NetworkExtension dict now lives here.
+name: AntiRot
+
+options:
+  bundleIdPrefix: com.ethancatzel
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    # Signing lives here (source of truth) so `xcodegen generate` reproduces it
+    # rather than reverting GUI edits. Manual + Developer ID is the notarizable,
+    # system-extension-capable path; per-target profile specifiers are below.
+    DEVELOPMENT_TEAM: "452Q4HE563"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "Developer ID Application"
+    ENABLE_HARDENED_RUNTIME: YES
+    DEAD_CODE_STRIPPING: YES
+    # Our Swift IS Swift-6-ready (@Observable + @MainActor + assumeIsolated — no
+    # concurrency errors). The only blocker is an SDK quirk: NENetworkRule's
+    # initializer is NS_REFINED_FOR_SWIFT, so under Swift 6 it imports as
+    # `__remoteNetwork:` instead of `remoteNetwork:`. Staying on Swift 5 until
+    # that NetworkExtension call has a clean Swift 6 form.
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  AntiRot:
+    type: application
+    platform: macOS
+    sources:
+      - App
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ethancatzel.AntiRot
+        PROVISIONING_PROFILE_SPECIFIER: AntiRot
+        CODE_SIGN_ENTITLEMENTS: App/AntiRot.entitlements
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: AntiRot
+        LSApplicationCategoryType: public.app-category.productivity
+        LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
+        NSSystemExtensionUsageDescription: "AntiRot uses a system extension to filter network traffic and block sites."
+    dependencies:
+      # Embeds the .systemextension into Contents/Library/SystemExtensions.
+      - target: FilterExtension
+        embed: true
+
+  FilterExtension:
+    type: system-extension
+    platform: macOS
+    sources:
+      - FilterExtension
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ethancatzel.AntiRot.FilterExtension
+        PRODUCT_NAME: com.ethancatzel.AntiRot.FilterExtension   # bundle filename must equal the bundle ID
+        PROVISIONING_PROFILE_SPECIFIER: AntiRotFilterExtension
+        CODE_SIGN_ENTITLEMENTS: FilterExtension/FilterExtension.entitlements
+    info:
+      path: FilterExtension/Info.plist
+      properties:
+        CFBundleDisplayName: AntiRot Filter
+        CFBundlePackageType: SYSX   # marks this bundle as a system extension
+        NSSystemExtensionUsageDescription: "AntiRot uses a system extension to filter network traffic and block sites."
+
+        # Tells the system which class to load as the content-filter provider.
+        NetworkExtension:
+          NEProviderClasses:
+            com.apple.networkextension.filter-data: $(PRODUCT_MODULE_NAME).FilterDataProvider
