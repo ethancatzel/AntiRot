@@ -12,6 +12,7 @@
 		135908EE10FE4284CF1700EB /* Blocklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B4F32DFA26B36A2603F1BB /* Blocklist.swift */; };
 		21470206C3734C12E02D7109 /* SNIInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BED356AC538DB8A5267F55C /* SNIInspector.swift */; };
 		60C7A453CE2D45BB26A269A1 /* Blocklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B4F32DFA26B36A2603F1BB /* Blocklist.swift */; };
+		61A5CF1AFE125A8831748E12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99D6A114E1BD1EBD3B0455FF /* Assets.xcassets */; };
 		6381B7D27550444FB99BD477 /* FilterDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48104BDFEE7C6B4D72476DC3 /* FilterDataProvider.swift */; };
 		748E1C632045B4954E6A993B /* AntiRotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9569E50442B176A137CB5DA8 /* AntiRotApp.swift */; };
 		87B43AD2EF5D9735D353E85D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8381D5F596771245AD03E9B /* main.swift */; };
@@ -50,6 +51,7 @@
 		48104BDFEE7C6B4D72476DC3 /* FilterDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterDataProvider.swift; sourceTree = "<group>"; };
 		88CA8E4CFE405B983533DAB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9569E50442B176A137CB5DA8 /* AntiRotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AntiRotApp.swift; sourceTree = "<group>"; };
+		99D6A114E1BD1EBD3B0455FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9BED356AC538DB8A5267F55C /* SNIInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNIInspector.swift; sourceTree = "<group>"; };
 		A2AD0C3386B467A827BBE843 /* AntiRot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AntiRot.entitlements; sourceTree = "<group>"; };
 		AF97001322BAF7782A2DEAFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			children = (
 				A2AD0C3386B467A827BBE843 /* AntiRot.entitlements */,
 				9569E50442B176A137CB5DA8 /* AntiRotApp.swift */,
+				99D6A114E1BD1EBD3B0455FF /* Assets.xcassets */,
 				AF97001322BAF7782A2DEAFA /* ContentView.swift */,
 				B91F4AD75746FEE8FC30F64C /* FilterController.swift */,
 				22B2D882F95D10F45EABB27C /* Info.plist */,
@@ -121,6 +124,7 @@
 			buildConfigurationList = 74407F8C62735D2DD9CF9D83 /* Build configuration list for PBXNativeTarget "AntiRot" */;
 			buildPhases = (
 				44B58610244AB40065B90D54 /* Sources */,
+				2AF271E2094CE38A229261AA /* Resources */,
 				54A9627F537AF7328BB44BAF /* Embed System Extensions */,
 			);
 			buildRules = (
@@ -190,6 +194,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2AF271E2094CE38A229261AA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61A5CF1AFE125A8831748E12 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		44B58610244AB40065B90D54 /* Sources */ = {

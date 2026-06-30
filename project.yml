@@ -43,6 +43,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.ethancatzel.AntiRot
         PROVISIONING_PROFILE_SPECIFIER: AntiRot
         CODE_SIGN_ENTITLEMENTS: App/AntiRot.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     info:
       path: App/Info.plist
       properties:
