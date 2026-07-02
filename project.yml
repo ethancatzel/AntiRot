@@ -47,6 +47,8 @@ targets:
     info:
       path: App/Info.plist
       properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDisplayName: AntiRot
         LSApplicationCategoryType: public.app-category.productivity
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
@@ -71,6 +73,8 @@ targets:
     info:
       path: FilterExtension/Info.plist
       properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDisplayName: AntiRot Filter
         CFBundlePackageType: SYSX   # marks this bundle as a system extension
         NSSystemExtensionUsageDescription: "AntiRot uses a system extension to filter network traffic and block sites."
