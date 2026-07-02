@@ -1,26 +1,50 @@
 import SwiftUI
 
-/// Native macOS control panel, modeled on the System Settings idiom: a grouped
-/// `Form` of system controls. Changes to the blocklist apply immediately (no
-/// Save button), as Mac settings conventionally do.
+/// Native macOS control panel in the System Settings idiom: a grouped `Form`
+/// headed by a status row with the master switch, the way the Firewall and VPN
+/// panes work. Blocklist edits apply immediately; there is no Save button.
 struct ContentView: View {
     @Environment(FilterController.self) private var controller
-    @State private var sites: [String] = Blocklist.domains
     @State private var newSite = ""
 
     var body: some View {
         Form {
             Section {
-                LabeledContent("Status") {
-                    Label(controller.isFilterEnabled ? "Blocking" : "Idle",
-                          systemImage: controller.isFilterEnabled ? "shield.lefthalf.filled" : "shield.slash")
-                        .foregroundStyle(controller.isFilterEnabled ? Color.green : .secondary)
-                }
-                Toggle("Block distracting sites", isOn: filterEnabled)
-            } header: {
-                Text("Protection")
+                statusRow
             } footer: {
-                Text(controller.status).foregroundStyle(.secondary)
+                if !controller.status.isEmpty {
+                    Text(controller.status).foregroundStyle(.secondary)
+                }
+            }
+
+            Section {
+                if controller.domains.isEmpty {
+                    Text("No sites blocked yet.").foregroundStyle(.secondary)
+                }
+                ForEach(controller.domains, id: \.self) { site in
+                    HStack {
+                        Text(site).monospaced()
+                        Spacer()
+                        Button("Remove \(site)", systemImage: "minus.circle.fill") {
+                            controller.removeSite(site)
+                        }
+                        .labelStyle(.iconOnly)
+                        .buttonStyle(.borderless)
+                        .foregroundStyle(.secondary)
+                    }
+                }
+                HStack {
+                    TextField("example.com", text: $newSite)
+                        .textFieldStyle(.roundedBorder)
+                        .onSubmit(add)
+                    Button("Add", action: add)
+                        .disabled(newSite.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            } header: {
+                Text("Blocked Sites")
+            } footer: {
+                Text("Subdomains are blocked too: x.com also blocks www.x.com.")
+                    .foregroundStyle(.secondary)
             }
 
             Section {
@@ -34,36 +58,37 @@ struct ContentView: View {
                 Text("AntiRot filters network traffic with a system extension. You'll approve it once in System Settings.")
                     .foregroundStyle(.secondary)
             }
-
-            Section("Blocked Sites") {
-                if sites.isEmpty {
-                    Text("No sites blocked yet.").foregroundStyle(.secondary)
-                }
-                ForEach(sites, id: \.self) { site in
-                    HStack {
-                        Text(site).monospaced()
-                        Spacer()
-                        Button(role: .destructive) {
-                            remove(site)
-                        } label: {
-                            Image(systemName: "minus.circle.fill")
-                        }
-                        .buttonStyle(.borderless)
-                        .foregroundStyle(.secondary)
-                        .help("Remove \(site)")
-                    }
-                }
-                HStack {
-                    TextField("Add a site — e.g. example.com", text: $newSite)
-                        .textFieldStyle(.roundedBorder)
-                        .onSubmit(add)
-                    Button("Add", action: add).disabled(cleaned.isEmpty)
-                }
-            }
         }
         .formStyle(.grouped)
         .frame(minWidth: 480, minHeight: 540)
         .task { await controller.syncEnabledState() }
+    }
+
+    /// The pane's identity: a shield that fills in when protection is on, the
+    /// current state in words, and the master switch.
+    private var statusRow: some View {
+        HStack(spacing: 14) {
+            Image(systemName: controller.isFilterEnabled ? "shield.lefthalf.filled" : "shield.slash")
+                .font(.system(size: 32))
+                .symbolRenderingMode(.hierarchical)
+                .foregroundStyle(controller.isFilterEnabled ? Color.green : Color.secondary)
+                .frame(width: 44)
+                .contentTransition(.symbolEffect(.replace))
+            VStack(alignment: .leading, spacing: 2) {
+                Text("AntiRot").font(.headline)
+                Text(controller.isFilterEnabled
+                     ? "Blocking ^[\(controller.domains.count) site](inflect: true)"
+                     : "Off")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Toggle("Block distracting sites", isOn: filterEnabled)
+                .labelsHidden()
+                .toggleStyle(.switch)
+        }
+        .padding(.vertical, 4)
+        .animation(.default, value: controller.isFilterEnabled)
     }
 
     /// A switch that drives the two filter actions; its read reflects live state.
@@ -72,22 +97,8 @@ struct ContentView: View {
                 set: { $0 ? controller.enableFilter() : controller.disableFilter() })
     }
 
-    private var cleaned: String {
-        newSite.trimmingCharacters(in: .whitespaces).lowercased()
-    }
-
     private func add() {
-        let site = cleaned
-        guard !site.isEmpty, !sites.contains(site) else { return }
-        sites.append(site)
+        controller.addSite(newSite)
         newSite = ""
-        Blocklist.domains = sites
-        controller.syncBlocklist()
-    }
-
-    private func remove(_ site: String) {
-        sites.removeAll { $0 == site }
-        Blocklist.domains = sites
-        controller.syncBlocklist()
     }
 }

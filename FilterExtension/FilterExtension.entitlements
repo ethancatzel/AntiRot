@@ -10,9 +10,5 @@
 	<array>
 		<string>content-filter-provider-systemextension</string>
 	</array>
-	<key>com.apple.security.application-groups</key>
-	<array>
-		<string>group.com.ethancatzel.AntiRot</string>
-	</array>
 </dict>
 </plist>

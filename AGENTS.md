@@ -25,8 +25,6 @@ x.com / Cloudflare problem), IPv6, and DNS caching.
   - `FilterDataProvider.swift`: `handleNewFlow` drops QUIC (UDP/443) and peeks
     TCP/443; `handleOutboundData` reads the SNI and matches the list.
   - `SNIInspector.swift`: parses the SNI from a TLS ClientHello.
-  - `QUICInitial.swift`: a QUIC v1 Initial decoder. Currently unused; QUIC is
-    dropped rather than parsed.
   - `main.swift`: the entry point (`NEProvider.startSystemExtensionMode()` + `dispatchMain()`).
 - `Shared/Blocklist.swift`: app-local list storage (`UserDefaults.standard`) plus
   the `isBlocked(_:in:)` matcher the extension calls.
@@ -41,19 +39,17 @@ the list through `NEFilterProviderConfiguration.vendorConfiguration` (key
 boundary.
 
 - The app sets `vendorConfiguration` when enabling the filter and on every edit
-  (`FilterController.syncBlocklist`).
+  (`FilterController` owns `domains`; its `didSet` persists and syncs).
 - Saving a changed config does not reload a running provider, so an edit bounces
   `isEnabled` off then on to restart the provider with the new list.
 - The extension reads the list from `filterConfiguration.vendorConfiguration["domains"]`.
-
-The App Group entitlement is still declared but the blocklist does not use it.
 
 ## Prerequisites (Apple Developer account)
 
 - Paid account. The NE entitlement is not on the free tier.
 - App IDs, with these capabilities enabled in the portal:
-  - `com.ethancatzel.AntiRot`: System Extension, Network Extensions, App Groups.
-  - `com.ethancatzel.AntiRot.FilterExtension`: Network Extensions, App Groups.
+  - `com.ethancatzel.AntiRot`: System Extension, Network Extensions.
+  - `com.ethancatzel.AntiRot.FilterExtension`: Network Extensions.
 - Manual Developer ID provisioning profiles named `AntiRot` and
   `AntiRotFilterExtension`. Automatic signing cannot provision the
   `content-filter-provider-systemextension` entitlement, so signing is manual and

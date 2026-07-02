@@ -1,22 +1,15 @@
 import Foundation
 
-/// Extracts the SNI `server_name` from a ClientHello — either straight from a
-/// TLS record (TCP) or from the handshake bytes recovered out of a decrypted
-/// QUIC Initial (UDP). All parsing is bounds-checked; any malformed or
-/// non-ClientHello input returns nil (→ the flow is allowed).
+/// Extracts the SNI `server_name` from a TLS ClientHello. All parsing is
+/// bounds-checked; any malformed or non-ClientHello input returns nil
+/// (→ the flow is allowed).
 enum SNIInspector {
 
-    /// TCP path: a TLS record (type 0x16, handshake) wrapping the ClientHello.
+    /// A TLS record (type 0x16, handshake) wrapping the ClientHello.
     static func serverNameFromTLS(_ data: Data) -> String? {
         let b = [UInt8](data)
         guard b.count > 5, b[0] == 0x16 else { return nil }  // handshake record
         return sniFromHandshake(b, start: 5)                 // skip 5-byte record header
-    }
-
-    /// UDP path: decrypt the QUIC Initial to its CRYPTO (handshake) bytes first.
-    static func serverNameFromQUIC(_ data: Data) -> String? {
-        guard let handshake = QUICInitial.clientHelloHandshake(data) else { return nil }
-        return sniFromHandshake([UInt8](handshake), start: 0)
     }
 
     /// Parse a handshake message at `start`: type(1)=0x01 ClientHello, length(3),

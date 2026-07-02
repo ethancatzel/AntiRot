@@ -12,8 +12,28 @@ import os
 @MainActor
 final class FilterController: NSObject {
 
-    var status = "Idle"
+    var status = ""
     var isFilterEnabled = false
+
+    /// The blocklist, owned here so the UI stays a plain rendering of it. All
+    /// edits go through `addSite`/`removeSite`, which normalize and dedup;
+    /// every change persists locally and pushes to the running extension.
+    private(set) var domains: [String] = Blocklist.domains {
+        didSet {
+            Blocklist.domains = domains
+            syncBlocklist()
+        }
+    }
+
+    func addSite(_ raw: String) {
+        let site = raw.trimmingCharacters(in: .whitespaces).lowercased()
+        guard !site.isEmpty, !domains.contains(site) else { return }
+        domains.append(site)
+    }
+
+    func removeSite(_ site: String) {
+        domains.removeAll { $0 == site }
+    }
 
     private enum Operation: Equatable { case activate, deactivate }
     @ObservationIgnored private var pending: Operation?
@@ -58,50 +78,51 @@ final class FilterController: NSObject {
         isFilterEnabled = mgr.isEnabled
     }
 
-    /// Push the current blocklist to the running extension. The extension runs as
-    /// root and can't read the app's storage, so the list travels through the
-    /// filter's `vendorConfiguration`. Call this after the user edits the list.
-    func syncBlocklist() {
+    private func applyFilter(enabled: Bool) async {
+        do {
+            let mgr = try await configuredManager()
+            mgr.isEnabled = enabled
+            try await mgr.saveToPreferences()
+            isFilterEnabled = enabled
+            status = ""
+        } catch {
+            status = "Filter error: \(error.localizedDescription)"
+        }
+    }
+
+    /// Push a blocklist edit to the running extension. Saving a changed config
+    /// doesn't reload the provider, so bounce `isEnabled` off then on to restart
+    /// it with the new list.
+    private func syncBlocklist() {
+        guard isFilterEnabled else { return }
         Task {
-            let mgr = NEFilterManager.shared()
             do {
-                try await mgr.loadFromPreferences()
-                guard mgr.isEnabled, let config = mgr.providerConfiguration else { return }
-                config.vendorConfiguration = ["domains": Blocklist.domains]
-                mgr.providerConfiguration = config
-                // Saving a changed config doesn't reload the running provider, so
-                // bounce isEnabled to restart it with the new list (what your
-                // manual off/on did).
+                let mgr = try await configuredManager()
                 mgr.isEnabled = false
                 try await mgr.saveToPreferences()
                 mgr.isEnabled = true
                 try await mgr.saveToPreferences()
             } catch {
-                status = "blocklist sync error: \(error.localizedDescription)"
+                status = "Blocklist sync error: \(error.localizedDescription)"
             }
         }
     }
 
-    /// Load the shared filter config, set the blocklist, flip its enabled state,
-    /// and save. Using async/await keeps every state mutation on the main actor —
-    /// `await` resumes here because this is a `@MainActor` type.
-    private func applyFilter(enabled: Bool) async {
+    /// Load the shared filter config and set the blocklist on it. The extension
+    /// runs as root and can't read the app's storage, so the list travels
+    /// through the config's `vendorConfiguration`. Async/await keeps every
+    /// state mutation on the main actor — `await` resumes here because this is
+    /// a `@MainActor` type.
+    private func configuredManager() async throws -> NEFilterManager {
         let mgr = NEFilterManager.shared()
-        do {
-            try await mgr.loadFromPreferences()
-            let config = mgr.providerConfiguration ?? NEFilterProviderConfiguration()
-            config.filterSockets = true
-            config.filterPackets = false
-            config.vendorConfiguration = ["domains": Blocklist.domains]
-            mgr.providerConfiguration = config
-            mgr.localizedDescription = "AntiRot"
-            mgr.isEnabled = enabled
-            try await mgr.saveToPreferences()
-            isFilterEnabled = enabled
-            status = enabled ? "Filter enabled" : "Filter disabled"
-        } catch {
-            status = "filter error: \(error.localizedDescription)"
-        }
+        try await mgr.loadFromPreferences()
+        let config = mgr.providerConfiguration ?? NEFilterProviderConfiguration()
+        config.filterSockets = true
+        config.filterPackets = false
+        config.vendorConfiguration = ["domains": domains]
+        mgr.providerConfiguration = config
+        mgr.localizedDescription = "AntiRot"
+        return mgr
     }
 }
 
@@ -115,9 +136,11 @@ extension FilterController: OSSystemExtensionRequestDelegate {
             if pending == .deactivate {
                 isFilterEnabled = false
                 status = "Extension removed"
+            } else if result == .completed {
+                status = "Extension activated"
+                enableFilter()
             } else {
-                status = "Extension activated — now enable the filter"
-                if result == .completed { enableFilter() }
+                status = "Extension activates after a reboot"
             }
             pending = nil
         }

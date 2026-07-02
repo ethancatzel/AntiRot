@@ -11,7 +11,7 @@ final class FilterDataProvider: NEFilterDataProvider {
 
     private let log = Logger(subsystem: "com.ethancatzel.AntiRot", category: "filter")
 
-    /// Enough to hold a TLS ClientHello or a QUIC Initial datagram.
+    /// Enough to hold a TLS ClientHello.
     private let peekBytes = 4096
 
     /// The blocklist the app handed us through the filter configuration. (The
