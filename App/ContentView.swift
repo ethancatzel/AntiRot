@@ -63,6 +63,7 @@ struct ContentView: View {
         }
         .formStyle(.grouped)
         .frame(minWidth: 480, minHeight: 540)
+        .task { await controller.syncEnabledState() }
     }
 
     /// A switch that drives the two filter actions; its read reflects live state.

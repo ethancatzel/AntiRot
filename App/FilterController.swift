@@ -49,6 +49,15 @@ final class FilterController: NSObject {
     func enableFilter() { Task { await applyFilter(enabled: true) } }
     func disableFilter() { Task { await applyFilter(enabled: false) } }
 
+    /// Reconcile `isFilterEnabled` with the system-persisted filter state on
+    /// cold start. `NEFilterManager.saveToPreferences()` already remembers the
+    /// enabled state across launches; this just reads it back.
+    func syncEnabledState() async {
+        let mgr = NEFilterManager.shared()
+        try? await mgr.loadFromPreferences()
+        isFilterEnabled = mgr.isEnabled
+    }
+
     /// Push the current blocklist to the running extension. The extension runs as
     /// root and can't read the app's storage, so the list travels through the
     /// filter's `vendorConfiguration`. Call this after the user edits the list.
