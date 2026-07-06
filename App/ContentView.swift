@@ -43,7 +43,7 @@ struct ContentView: View {
             } header: {
                 Text("Blocked Sites")
             } footer: {
-                Text("Subdomains are blocked too: x.com also blocks www.x.com.")
+                Text(verbatim: "Subdomains are blocked too (e.g. x.com also blocks www.x.com).")
                     .foregroundStyle(.secondary)
             }
 
