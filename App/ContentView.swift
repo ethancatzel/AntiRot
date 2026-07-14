@@ -1,6 +1,7 @@
+import AppKit
 import SwiftUI
 
-/// Native macOS control panel in the System Settings idiom: a grouped `Form`
+/// The menu bar panel, laid out in the System Settings idiom: a grouped `Form`
 /// headed by a status row with the master switch, the way the Firewall and VPN
 /// panes work. Blocklist edits apply immediately; there is no Save button.
 struct ContentView: View {
@@ -44,7 +45,7 @@ struct ContentView: View {
             } header: {
                 Text("Blocked Sites")
             } footer: {
-                Text(verbatim: "Subdomains are blocked too (e.g. x.com also blocks www.x.com).")
+                Text("Subdomains are blocked too.")
                     .foregroundStyle(.secondary)
             }
 
@@ -56,20 +57,30 @@ struct ContentView: View {
                     }
                 }
             } footer: {
-                Text("AntiRot filters network traffic with a system extension. You'll approve it once in System Settings.")
+                Text("AntiRot filters network traffic with a system extension. You'll approve it once in System Settings. Quitting stops blocking; the extension stays installed.")
                     .foregroundStyle(.secondary)
+            }
+
+            Section {
+                Button {
+                    NSApp.terminate(nil)
+                } label: {
+                    Text("Quit").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderless)
+                .foregroundStyle(.red)
+                .keyboardShortcut("q")
             }
         }
         .formStyle(.grouped)
-        .frame(minWidth: 480, minHeight: 540)
-        .task { await controller.syncEnabledState() }
+        .frame(width: 360, height: 460)
     }
 
     /// The pane's identity: a shield that fills in when protection is on, the
     /// current state in words, and the master switch.
     private var statusRow: some View {
         HStack(spacing: 14) {
-            Image(systemName: controller.isFilterEnabled ? "shield.lefthalf.filled" : "shield.slash")
+            Image(systemName: controller.shieldSymbol)
                 .font(.system(size: 32))
                 .symbolRenderingMode(.hierarchical)
                 .foregroundStyle(controller.isFilterEnabled ? Color.green : Color.secondary)
@@ -92,10 +103,10 @@ struct ContentView: View {
         .animation(.default, value: controller.isFilterEnabled)
     }
 
-    /// A switch that drives the two filter actions; its read reflects live state.
+    /// A switch that drives the filter; its read reflects live state.
     private var filterEnabled: Binding<Bool> {
         Binding(get: { controller.isFilterEnabled },
-                set: { $0 ? controller.enableFilter() : controller.disableFilter() })
+                set: { controller.setFilter(enabled: $0) })
     }
 
     private func add() {

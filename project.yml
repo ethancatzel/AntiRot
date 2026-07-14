@@ -28,8 +28,8 @@ settings:
     # `__remoteNetwork:` instead of `remoteNetwork:`. Staying on Swift 5 until
     # that NetworkExtension call has a clean Swift 6 form.
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: "2026.7.2"
-    CURRENT_PROJECT_VERSION: "2"
+    MARKETING_VERSION: "2026.7.14"
+    CURRENT_PROJECT_VERSION: "3"
 
 targets:
   AntiRot:
@@ -52,6 +52,9 @@ targets:
         CFBundleDisplayName: AntiRot
         LSApplicationCategoryType: public.app-category.productivity
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
+        # Menu-bar-only agent: no Dock icon, no app menu. The MenuBarExtra scene
+        # is the entire UI, so the panel carries its own Quit.
+        LSUIElement: true
         NSSystemExtensionUsageDescription: "AntiRot uses a system extension to filter network traffic and block sites."
     dependencies:
       # Embeds the .systemextension into Contents/Library/SystemExtensions.

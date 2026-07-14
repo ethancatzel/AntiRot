@@ -15,6 +15,10 @@ final class FilterController: NSObject {
     var status = ""
     var isFilterEnabled = false
 
+    var shieldSymbol: String {
+        isFilterEnabled ? "shield.lefthalf.filled" : "shield.slash"
+    }
+
     /// The blocklist, owned here so the UI stays a plain rendering of it. All
     /// edits go through `addSite`/`removeSite`, which normalize and dedup;
     /// every change persists locally and pushes to the running extension.
@@ -36,29 +40,48 @@ final class FilterController: NSObject {
     }
 
     private enum Operation: Equatable { case activate, deactivate }
-    @ObservationIgnored private var pending: Operation?
+    @ObservationIgnored private var pending: [ObjectIdentifier: Operation] = [:]
+    @ObservationIgnored private var isStopping = false
     private let extensionID = "com.ethancatzel.AntiRot.FilterExtension"
     private let log = Logger(subsystem: "com.ethancatzel.AntiRot", category: "controller")
+
+    /// Every `NEFilterManager` mutation is queued here and runs alone. The
+    /// manager is a process-wide singleton and each step awaits IPC, so
+    /// concurrent callers interleave and the last save silently wins.
+    @ObservationIgnored private var work: Task<Void, Never> = Task {}
+
+    @discardableResult
+    private func serialized(_ step: @escaping () async -> Void) -> Task<Void, Never> {
+        let previous = work
+        let task = Task { @MainActor in
+            await previous.value
+            await step()
+        }
+        work = task
+        return task
+    }
 
     // MARK: Step 1 — system extension
 
     func activate() {
-        pending = .activate
         submit(.activationRequest(forExtensionWithIdentifier: extensionID, queue: .main),
-               status: "Requesting activation…")
+               operation: .activate, status: "Requesting activation…")
     }
 
     /// Turn filtering off first, then remove the extension, for a clean teardown.
     func deactivate() {
-        Task {
-            await applyFilter(enabled: false)
-            pending = .deactivate
-            submit(.deactivationRequest(forExtensionWithIdentifier: extensionID, queue: .main),
-                   status: "Removing extension…")
+        serialized {
+            await self.applyFilter(enabled: false)
+            self.submit(.deactivationRequest(forExtensionWithIdentifier: self.extensionID, queue: .main),
+                        operation: .deactivate, status: "Removing extension…")
         }
     }
 
-    private func submit(_ request: OSSystemExtensionRequest, status: String) {
+    /// Keyed by request: an activation awaiting approval can still be in flight
+    /// when a deactivation is submitted, so a single slot would misattribute the
+    /// results.
+    private func submit(_ request: OSSystemExtensionRequest, operation: Operation, status: String) {
+        pending[ObjectIdentifier(request)] = operation
         self.status = status
         request.delegate = self
         OSSystemExtensionManager.shared.submitRequest(request)
@@ -66,16 +89,27 @@ final class FilterController: NSObject {
 
     // MARK: Step 2 — filter configuration
 
-    func enableFilter() { Task { await applyFilter(enabled: true) } }
-    func disableFilter() { Task { await applyFilter(enabled: false) } }
+    func setFilter(enabled: Bool) {
+        guard !(isStopping && enabled) else { return }
+        serialized { await self.applyFilter(enabled: enabled) }
+    }
 
-    /// Reconcile `isFilterEnabled` with the system-persisted filter state on
-    /// cold start. `NEFilterManager.saveToPreferences()` already remembers the
-    /// enabled state across launches; this just reads it back.
-    func syncEnabledState() async {
+    /// The quit path. Queues behind any in-flight work, then waits for the save,
+    /// because the process exits as soon as this returns. `isStopping` keeps a
+    /// late activation callback from enabling the filter on the way out.
+    func stopFiltering() async {
+        isStopping = true
+        await serialized { await self.applyFilter(enabled: false) }.value
+    }
+
+    /// Running means blocking. Activation is idempotent, so asking for it every
+    /// launch also heals a missing or stale extension, and its result enables
+    /// the filter.
+    func enableOnLaunch() async {
         let mgr = NEFilterManager.shared()
         try? await mgr.loadFromPreferences()
         isFilterEnabled = mgr.isEnabled
+        activate()
     }
 
     private func applyFilter(enabled: Bool) async {
@@ -95,15 +129,15 @@ final class FilterController: NSObject {
     /// it with the new list.
     private func syncBlocklist() {
         guard isFilterEnabled else { return }
-        Task {
+        serialized {
             do {
-                let mgr = try await configuredManager()
+                let mgr = try await self.configuredManager()
                 mgr.isEnabled = false
                 try await mgr.saveToPreferences()
                 mgr.isEnabled = true
                 try await mgr.saveToPreferences()
             } catch {
-                status = "Blocklist sync error: \(error.localizedDescription)"
+                self.status = "Blocklist sync error: \(error.localizedDescription)"
             }
         }
     }
@@ -133,24 +167,22 @@ extension FilterController: OSSystemExtensionRequestDelegate {
                              didFinishWithResult result: OSSystemExtensionRequest.Result) {
         MainActor.assumeIsolated {
             log.info("request result: \(result.rawValue)")
-            if pending == .deactivate {
-                isFilterEnabled = false
+            if pending.removeValue(forKey: ObjectIdentifier(request)) == .deactivate {
                 status = "Extension removed"
             } else if result == .completed {
                 status = "Extension activated"
-                enableFilter()
+                setFilter(enabled: true)
             } else {
                 status = "Extension activates after a reboot"
             }
-            pending = nil
         }
     }
 
     nonisolated func request(_ request: OSSystemExtensionRequest, didFailWithError error: Error) {
         MainActor.assumeIsolated {
-            let verb = pending == .deactivate ? "Deactivation" : "Activation"
+            let operation = pending.removeValue(forKey: ObjectIdentifier(request))
+            let verb = operation == .deactivate ? "Deactivation" : "Activation"
             status = "\(verb) failed: \(error.localizedDescription)"
-            pending = nil
         }
     }
 

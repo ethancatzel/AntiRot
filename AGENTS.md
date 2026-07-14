@@ -19,7 +19,21 @@ x.com / Cloudflare problem), IPv6, and DNS caching.
 
 - `App/` is the SwiftUI app (non-sandboxed). It activates the extension
   (`OSSystemExtensionRequest`), enables the filter (`NEFilterManager`), and edits
-  the blocklist.
+  the blocklist. It is a menu bar agent: `LSUIElement` keeps it out of the Dock,
+  and a `MenuBarExtra` scene in `.window` style hosts the entire UI, so the panel
+  carries its own Quit button.
+- Running means blocking. `AppDelegate` drives both ends: launching enables the
+  filter (`FilterController.enableOnLaunch`) and quitting disables it
+  (`applicationShouldTerminate` defers the exit until the config save lands, and
+  no longer than 5s). The toggle pauses blocking while the app runs. The
+  extension stays installed across a quit; only `Deactivate` removes it, and
+  reinstalling needs approval again.
+- Launch submits an activation request unconditionally. Activation is
+  idempotent, so an already-installed extension completes without prompting, and
+  a missing or stale one is reinstalled.
+- Every `NEFilterManager` mutation is queued through `FilterController.serialized`
+  and runs alone. The manager is a process-wide singleton and each step awaits
+  IPC, so concurrent callers interleave and the last save silently wins.
 - `FilterExtension/` is the `NEFilterDataProvider` system extension. It runs as
   root, inspects TCP/443 TLS ClientHellos for the SNI hostname, and drops blocked ones.
   - `FilterDataProvider.swift`: `handleNewFlow` drops QUIC (UDP/443) and peeks
