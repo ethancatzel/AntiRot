@@ -99,13 +99,28 @@ SIP on):
 
 1. Xcode: Product, Archive. Then Distribute App, Direct Distribution, Export (notarizes).
 2. Move `AntiRot.app` to `/Applications`.
-3. Launch, click Activate, approve in System Settings, General, Login Items and
-   Extensions, Network Extensions.
-4. Toggle Block on and approve the content-filter prompt.
+3. Launch it. It submits the activation request itself; approve in System
+   Settings, General, Login Items and Extensions, Network Extensions.
+4. Approve the content-filter prompt.
 
 Replacing a build: macOS keys extension replacement off `CFBundleVersion`. A
-same-version reinstall keeps the old extension, so click Deactivate then Activate
-to force the new one (or bump `CURRENT_PROJECT_VERSION`).
+same-version reinstall keeps the old extension, so bump
+`CURRENT_PROJECT_VERSION` (or click Deactivate, then relaunch) to force the new
+one.
+
+## Release
+
+`MARKETING_VERSION` is `YYYY.M.D`, the tag is `vYYYY.MM.DD`. Ship the notarized
+bundle from `/Applications`, not a fresh build: verify it, zip it with `ditto`
+(plain `zip` mangles the bundle's symlinks and breaks the signature), attach it
+to a GitHub release.
+
+```sh
+spctl -a -vvv -t exec /Applications/AntiRot.app   # expect: source=Notarized Developer ID
+xcrun stapler validate /Applications/AntiRot.app
+ditto -c -k --keepParent --sequesterRsrc /Applications/AntiRot.app AntiRot-<version>.zip
+gh release create v<version> AntiRot-<version>.zip --target main --title v<version> --notes '...'
+```
 
 ## Conventions and gotchas
 
@@ -119,7 +134,8 @@ to force the new one (or bump `CURRENT_PROJECT_VERSION`).
   the blocker is `NENetworkRule`'s `NS_REFINED_FOR_SWIFT` initializer importing as
   `__remoteNetwork:` under Swift 6.
 - Blocking is two steps: activate the system extension (approved once), then
-  enable the filter. Activation is not filtering.
+  enable the filter. Activation is not filtering. The app does both on launch,
+  but they fail independently.
 - `main.swift` is required. A system extension is a plain executable, not an
   auto-`main` app extension. Do not delete it.
 
