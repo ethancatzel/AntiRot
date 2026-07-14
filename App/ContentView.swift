@@ -34,7 +34,8 @@ struct ContentView: View {
                     }
                 }
                 HStack {
-                    TextField("example.com", text: $newSite)
+                    TextField("Site to block", text: $newSite, prompt: Text(verbatim: ""))
+                        .labelsHidden()
                         .textFieldStyle(.roundedBorder)
                         .onSubmit(add)
                     Button("Add", action: add)
@@ -72,7 +73,7 @@ struct ContentView: View {
                 .font(.system(size: 32))
                 .symbolRenderingMode(.hierarchical)
                 .foregroundStyle(controller.isFilterEnabled ? Color.green : Color.secondary)
-                .frame(width: 44)
+                .frame(width: 44, height: 40)
                 .contentTransition(.symbolEffect(.replace))
             VStack(alignment: .leading, spacing: 2) {
                 Text("AntiRot").font(.headline)
