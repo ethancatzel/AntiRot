@@ -138,6 +138,9 @@ gh release create v<version> AntiRot-<version>.zip --target main --title v<versi
   but they fail independently.
 - `main.swift` is required. A system extension is a plain executable, not an
   auto-`main` app extension. Do not delete it.
+- `MenuBarExtra`'s label does not inherit a scene-level `.environment`. The
+  controller is injected into the content and the label separately. Collapsing
+  the two into one modifier on the scene compiles, then traps at launch.
 
 ## How blocking works and its limits
 
@@ -155,6 +158,11 @@ Limits, inherent to any non-MITM on-device filter:
 
 ## Debugging
 
+- `xcodebuild` only compile-checks. To smoke-test the UI and lifecycle without
+  notarizing, launch the Debug build straight from `BUILT_PRODUCTS_DIR` and quit
+  it with `osascript -e 'tell application id "com.ethancatzel.AntiRot" to quit'`.
+  The filter and extension calls fail (unsigned), but view construction, the menu
+  bar icon, and the deferred-quit path all run.
 - The filter logs at `info` level, which `log show` hides by default. Use:
   `log show --last 5m --info --predicate 'subsystem == "com.ethancatzel.AntiRot"'`
 - Confirm a block at the network layer: `nc -z <ip> 443` succeeds (TCP opens) but
