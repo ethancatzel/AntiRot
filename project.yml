@@ -28,8 +28,8 @@ settings:
     # `__remoteNetwork:` instead of `remoteNetwork:`. Staying on Swift 5 until
     # that NetworkExtension call has a clean Swift 6 form.
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: "2026.7.14"
-    CURRENT_PROJECT_VERSION: "3"
+    MARKETING_VERSION: "2026.7.16"
+    CURRENT_PROJECT_VERSION: "4"
 
 targets:
   AntiRot:
